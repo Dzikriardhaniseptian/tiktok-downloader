@@ -3,49 +3,94 @@
   <head>
     <meta charset="UTF-8" />
     <title>Downloader TikTok</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: #000000;
+        background: radial-gradient(circle at top, #ff4b9a 0, #000 55%);
         color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px 10px;
       }
 
       .container {
+        width: 100%;
         max-width: 900px;
-        margin: 40px auto;
-        padding: 20px 30px 60px;
-        background: #111111;
+        padding: 24px 20px 32px;
+        background: rgba(10, 10, 10, 0.95);
         border-radius: 20px;
         box-shadow: 0 0 30px rgba(255, 0, 102, 0.7);
+        border: 1px solid rgba(255, 75, 154, 0.5);
       }
 
       h1 {
         text-align: center;
-        margin-top: 0;
+        margin: 0;
         color: #ff4b9a;
         text-shadow: 0 0 10px #ff4b9a;
+        font-size: 26px;
       }
 
       .author {
         text-align: center;
-        color: #ff1493;
+        color: #ffb3dd;
         font-weight: bold;
-        margin-top: -10px;
-        margin-bottom: 20px;
-        text-shadow: 0 0 8px #ff1493;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        font-size: 14px;
+        text-shadow: 0 0 6px #ff1493;
+      }
+
+      .tagline {
+        text-align: center;
+        font-size: 13px;
+        color: #bbbbbb;
+        margin-bottom: 18px;
       }
 
       h2 {
         text-align: center;
+        font-size: 18px;
+        margin: 10px 0 8px;
       }
 
-      ul {
-        line-height: 1.8;
+      .steps {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 20px;
+      }
+
+      .steps li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .step-number {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #ff007f;
+        font-size: 13px;
+        font-weight: bold;
+        margin-right: 8px;
+        box-shadow: 0 0 10px rgba(255, 0, 127, 0.9);
       }
 
       .input-wrapper {
-        margin-top: 25px;
+        margin-top: 10px;
       }
 
       #tiktokLink {
@@ -56,41 +101,104 @@
         outline: none;
         background: #222;
         color: #fff;
-        font-size: 16px;
+        font-size: 15px;
       }
 
       #tiktokLink::placeholder {
         color: #888;
       }
 
+      .btn-row {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
       .btn-download {
-        margin-top: 20px;
         width: 100%;
-        padding: 16px;
+        padding: 14px;
         border: none;
         border-radius: 999px;
         background: #ff007f;
         color: #ffffff;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         cursor: pointer;
-        box-shadow: 0 0 20px rgba(255, 0, 127, 0.9);
-        transition: transform 0.1s ease, box-shadow 0.1s ease;
+        box-shadow: 0 0 18px rgba(255, 0, 127, 0.9);
+        transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s;
       }
 
       .btn-download:hover {
         transform: translateY(-1px);
-        box-shadow: 0 0 30px rgba(255, 0, 127, 1);
+        box-shadow: 0 0 26px rgba(255, 0, 127, 1);
+        opacity: 0.95;
+      }
+
+      .note {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #aaaaaa;
+        text-align: center;
       }
 
       #result {
-        margin-top: 25px;
-        font-size: 16px;
+        margin-top: 22px;
+        font-size: 14px;
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid rgba(77, 255, 121, 0.3);
+        min-height: 24px;
+      }
+
+      #result p {
+        margin: 6px 0;
       }
 
       #result a {
         color: #4dff79;
         font-weight: bold;
+        text-decoration: underline;
+      }
+
+      #result img {
+        display: block;
+        margin-top: 8px;
+      }
+
+      .footer {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 11px;
+        color: #777777;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px 16px 26px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .author {
+          font-size: 13px;
+        }
+
+        .tagline {
+          font-size: 12px;
+        }
+
+        .btn-download {
+          font-size: 15px;
+          padding: 12px;
+        }
+
+        #result {
+          font-size: 13px;
+        }
       }
     </style>
   </head>
@@ -98,14 +206,30 @@
     <div class="container">
       <h1>Downloader TikTok</h1>
       <p class="author">By: Dzikri</p>
+      <p class="tagline">Tools sederhana dengan tampilan neon-style.</p>
 
       <h2>Petunjuk Pemakaian</h2>
-      <ul>
-        <li>1. Buka aplikasi TikTok</li>
-        <li>2. Tekan tombol "Bagikan"</li>
-        <li>3. Pilih "Salin Tautan"</li>
-        <li>4. Tempel link di kotak bawah ini</li>
-        <li>5. Tekan tombol "Download Video"</li>
+      <ul class="steps">
+        <li>
+          <span class="step-number">1</span>
+          <span>Buka aplikasi TikTok.</span>
+        </li>
+        <li>
+          <span class="step-number">2</span>
+          <span>Tekan tombol "Bagikan".</span>
+        </li>
+        <li>
+          <span class="step-number">3</span>
+          <span>Pilih "Salin Tautan".</span>
+        </li>
+        <li>
+          <span class="step-number">4</span>
+          <span>Tempel link di kotak di bawah.</span>
+        </li>
+        <li>
+          <span class="step-number">5</span>
+          <span>Tekan tombol "Download Video".</span>
+        </li>
       </ul>
 
       <div class="input-wrapper">
@@ -116,11 +240,21 @@
         />
       </div>
 
-      <button class="btn-download" onclick="downloadVideo()">
-        Download Video
-      </button>
+      <div class="btn-row">
+        <button class="btn-download" onclick="downloadVideo()">
+          Download Video
+        </button>
+      </div>
+
+      <p class="note">
+        Pastikan link sudah benar sebelum menekan tombol download.
+      </p>
 
       <div id="result"></div>
+
+      <div class="footer">
+        <span>Program by Dzikri • Hosted on Railway</span>
+      </div>
     </div>
 
     <script>
