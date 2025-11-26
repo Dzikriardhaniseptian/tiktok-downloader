@@ -129,10 +129,15 @@
         transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s;
       }
 
-      .btn-download:hover {
+      .btn-download:hover:enabled {
         transform: translateY(-1px);
         box-shadow: 0 0 26px rgba(255, 0, 127, 1);
         opacity: 0.95;
+      }
+
+      .btn-download:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
 
       .note {
@@ -142,7 +147,17 @@
         text-align: center;
       }
 
+      #errorMsg {
+        display: none;
+        color: #ff4b4b;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 13px;
+        transition: opacity 0.3s ease;
+      }
+
       #result {
+        display: none; /* awalnya sembunyi */
         margin-top: 22px;
         font-size: 14px;
         padding: 14px;
@@ -250,6 +265,10 @@
         Pastikan link sudah benar sebelum menekan tombol download.
       </p>
 
+      <!-- pesan error yang rapi -->
+      <p id="errorMsg"></p>
+
+      <!-- hasil download -->
       <div id="result"></div>
 
       <div class="footer">
@@ -258,14 +277,40 @@
     </div>
 
     <script>
+      function showError(msg) {
+        const err = document.getElementById("errorMsg");
+        err.textContent = msg;
+        err.style.display = "block";
+        err.style.opacity = "1";
+
+        setTimeout(() => {
+          err.style.opacity = "0";
+          setTimeout(() => {
+            err.style.display = "none";
+          }, 300);
+        }, 3500);
+      }
+
       async function downloadVideo() {
         const input = document.getElementById("tiktokLink");
         const url = input.value.trim();
+        const btn = document.querySelector(".btn-download");
+        const result = document.getElementById("result");
+        const err = document.getElementById("errorMsg");
 
         if (!url) {
-          alert("Tempel link TikTok dulu bro 🙂");
+          showError("Tempel link TikTok dulu bro 🙂");
           return;
         }
+
+        // reset state
+        err.style.display = "none";
+        result.style.display = "none";
+        result.innerHTML = "";
+
+        // loading state
+        btn.disabled = true;
+        btn.textContent = "Processing…";
 
         try {
           const res = await fetch("/download", {
@@ -277,18 +322,21 @@
           const data = await res.json();
 
           if (data.status === "success") {
-            const result = document.getElementById("result");
+            result.style.display = "block";
             result.innerHTML = `
-              <p>Video siap di-download:</p>
+              <p style="color:#4dff79;">Video siap di-download:</p>
               <p><a href="${data.video_url}" target="_blank">Klik di sini untuk download video</a></p>
-              <p><img src="${data.cover}" alt="Thumbnail" style="max-width:200px;border-radius:10px;margin-top:10px;"></p>
+              <img src="${data.cover}" alt="Thumbnail" style="max-width:200px;border-radius:10px;margin-top:10px;">
             `;
           } else {
-            alert(data.error || "Gagal mengambil video.");
+            showError(data.error || "Gagal mengambil video.");
           }
-        } catch (err) {
-          console.error(err);
-          alert("Terjadi error saat menghubungi server.");
+        } catch (e) {
+          console.error(e);
+          showError("Terjadi error saat menghubungi server.");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Download Video";
         }
       }
     </script>
