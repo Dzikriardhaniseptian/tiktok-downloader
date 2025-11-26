@@ -27,6 +27,15 @@
         text-shadow: 0 0 10px #ff4b9a;
       }
 
+      .author {
+        text-align: center;
+        color: #ff1493;
+        font-weight: bold;
+        margin-top: -10px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 8px #ff1493;
+      }
+
       h2 {
         text-align: center;
       }
@@ -88,6 +97,7 @@
   <body>
     <div class="container">
       <h1>Downloader TikTok</h1>
+      <p class="author">By: Dzikri</p>
 
       <h2>Petunjuk Pemakaian</h2>
       <ul>
@@ -124,7 +134,6 @@
         }
 
         try {
-          // kirim ke backend: POST /download
           const res = await fetch("/download", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
