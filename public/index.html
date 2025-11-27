@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Downloader TikTok</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px 30px 60px;
+        background: #111111;
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(255, 0, 102, 0.7);
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 0;
+        color: #ff4b9a;
+        text-shadow: 0 0 10px #ff4b9a;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      ul {
+        line-height: 1.8;
+      }
+
+      .input-wrapper {
+        margin-top: 25px;
+      }
+
+      #tiktokLink {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        background: #222;
+        color: #fff;
+        font-size: 16px;
+      }
+
+      #tiktokLink::placeholder {
+        color: #888;
+      }
+
+      .btn-download {
+        margin-top: 20px;
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 999px;
+        background: #ff007f;
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(255, 0, 127, 0.9);
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+      }
+
+      .btn-download:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0 30px rgba(255, 0, 127, 1);
+      }
+
+      #result {
+        margin-top: 25px;
+        font-size: 16px;
+      }
+
+      #result a {
+        color: #4dff79;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Downloader TikTok</h1>
+
+      <h2>Petunjuk Pemakaian</h2>
+      <ul>
+        <li>1. Buka aplikasi TikTok</li>
+        <li>2. Tekan tombol "Bagikan"</li>
+        <li>3. Pilih "Salin Tautan"</li>
+        <li>4. Tempel link di kotak bawah ini</li>
+        <li>5. Tekan tombol "Download Video"</li>
+      </ul>
+
+      <div class="input-wrapper">
+        <input
+          id="tiktokLink"
+          type="text"
+          placeholder="Tempel link TikTok di sini..."
+        />
+      </div>
+
+      <button class="btn-download" onclick="downloadVideo()">
+        Download Video
+      </button>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      async function downloadVideo() {
+        const input = document.getElementById("tiktokLink");
+        const url = input.value.trim();
+
+        if (!url) {
+          alert("Tempel link TikTok dulu bro 🙂");
+          return;
+        }
+
+        try {
+          // kirim ke backend: POST /download
+          const res = await fetch("/download", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+
+          const data = await res.json();
+
+          if (data.status === "success") {
+            const result = document.getElementById("result");
+            result.innerHTML = `
+              <p>Video siap di-download:</p>
+              <p><a href="${data.video_url}" target="_blank">Klik di sini untuk download video</a></p>
+              <p><img src="${data.cover}" alt="Thumbnail" style="max-width:200px;border-radius:10px;margin-top:10px;"></p>
+            `;
+          } else {
+            alert(data.error || "Gagal mengambil video.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Terjadi error saat menghubungi server.");
+        }
+      }
+    </script>
+  </body>
+</html>
