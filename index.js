@@ -2,7 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
 const { exec } = require("child_process");
-const yt_dlp = require("yt-dlp");  // Untuk mendownload MP3
+const ytdl = require("youtube-dl-exec");  // Pake youtube-dl-exec
 
 const app = express();
 
@@ -68,7 +68,7 @@ app.post("/download_mp3", async (req, res) => {
   }
 });
 
-// Fungsi untuk download MP3 menggunakan yt-dlp
+// Fungsi untuk download MP3 menggunakan youtube-dl-exec
 async function downloadMp3(url) {
   return new Promise((resolve, reject) => {
     const ydl_opts = {
@@ -81,16 +81,13 @@ async function downloadMp3(url) {
       outtmpl: "downloads/output.%(ext)s",  // Tempat nyimpen file
     };
 
-    const ydl = new yt_dlp.YoutubeDL(ydl_opts);
-    ydl.download([url]);
-
-    ydl.on("end", () => {
-      resolve("downloads/output.mp3");  // Kembalikan path file MP3
-    });
-
-    ydl.on("error", (err) => {
-      reject(err);
-    });
+    ytdl(url, ydl_opts) // Ganti yt-dlp ke youtube-dl-exec
+      .then(() => {
+        resolve("downloads/output.mp3");  // Kembalikan path file MP3
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
