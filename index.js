@@ -1,3 +1,4 @@
+const fs = require("fs");  // Import fs untuk file system
 const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
