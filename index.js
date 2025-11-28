@@ -69,37 +69,4 @@ app.post("/download_mp3", async (req, res) => {
   }
 });
 
-// Fungsi untuk download MP3 menggunakan youtube-dl-exec
-async function downloadMp3(url) {
-  return new Promise((resolve, reject) => {
-    const ydl_opts = {
-      format: "bestaudio/best",
-      postprocessors: [{
-        key: "FFmpegAudioConvertor",
-        preferredcodec: "mp3",
-        preferredquality: "192",
-      }],
-      outtmpl: path.join(__dirname, "downloads", "output.%(ext)s"),  // Pastikan pathnya benar
-    };
-
-    // Pastikan folder downloads ada
-    const downloadFolder = path.join(__dirname, "downloads");
-    if (!fs.existsSync(downloadFolder)) {
-      fs.mkdirSync(downloadFolder); // Buat folder downloads kalau belum ada
-    }
-
-    ytdl(url, ydl_opts) // Pake youtube-dl-exec
-      .then(() => {
-        resolve(path.join(downloadFolder, "output.mp3"));  // Kembalikan path file MP3
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
-
-// Nyalakan server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server berjalan di port ${PORT}`);
-});
+// Fungsi untuk downloa
