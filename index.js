@@ -2,6 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const path = require("path");
 const { exec } = require("child_process");
+const fs = require("fs");  // Import fs untuk file system
 const ytdl = require("youtube-dl-exec");  // Pake youtube-dl-exec
 
 const app = express();
@@ -80,6 +81,11 @@ async function downloadMp3(url) {
       }],
       outtmpl: "downloads/output.%(ext)s",  // Tempat nyimpen file
     };
+
+    // Pastikan folder downloads ada
+    if (!fs.existsSync("downloads")) {
+      fs.mkdirSync("downloads"); // Buat folder downloads kalau belum ada
+    }
 
     ytdl(url, ydl_opts) // Ganti yt-dlp ke youtube-dl-exec
       .then(() => {
