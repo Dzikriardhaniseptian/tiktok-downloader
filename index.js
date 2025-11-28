@@ -79,17 +79,18 @@ async function downloadMp3(url) {
         preferredcodec: "mp3",
         preferredquality: "192",
       }],
-      outtmpl: "downloads/output.%(ext)s",  // Tempat nyimpen file
+      outtmpl: path.join(__dirname, "downloads", "output.%(ext)s"),  // Pastikan pathnya benar
     };
 
     // Pastikan folder downloads ada
-    if (!fs.existsSync("downloads")) {
-      fs.mkdirSync("downloads"); // Buat folder downloads kalau belum ada
+    const downloadFolder = path.join(__dirname, "downloads");
+    if (!fs.existsSync(downloadFolder)) {
+      fs.mkdirSync(downloadFolder); // Buat folder downloads kalau belum ada
     }
 
-    ytdl(url, ydl_opts) // Ganti yt-dlp ke youtube-dl-exec
+    ytdl(url, ydl_opts) // Pake youtube-dl-exec
       .then(() => {
-        resolve("downloads/output.mp3");  // Kembalikan path file MP3
+        resolve(path.join(downloadFolder, "output.mp3"));  // Kembalikan path file MP3
       })
       .catch((err) => {
         reject(err);
